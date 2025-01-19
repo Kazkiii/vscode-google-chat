@@ -1,71 +1,74 @@
-# google-chat README
-
-This is the README for your extension "google-chat". After writing up a brief description, we recommend including the following sections.
+# Google Chat VSCode Extension
+This extension integrates Google Chat functionality directly into Visual Studio Code, allowing users to view and send messages in Google Chat spaces or DMs without leaving their development environment.
 
 ## Features
+### 1. Space and DM Selection:
+- View a dropdown list of Google Chat spaces and DMs.
+- Refresh the list of spaces with a single click.
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+### 2. Chat Messaging:
+- View the chat history of the selected space or DM.
+- Send new messages directly from the VSCode sidebar.
 
-For example if there is an image subfolder under your extension project workspace:
+### 3. Authentication:
+- Authenticate with your Google account to enable the extension.
 
-\!\[feature X\]\(images/feature-x.png\)
+### 4. Dynamic Chat History Loading:
+- Retrieve a limited number of recent messages.
+- Load older messages by scrolling to the top of the chat history.
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## Prerequisites
+- A Google account with access to Google Chat.
+- A registered Google API project with the Chat API enabled.
+- ClientId and ClientSecret for OAuth2 authentication.
 
-## Requirements
+## How to Obtain ClientId and ClientSecret
+To use this extension, you need to obtain ClientId and ClientSecret from the Google Cloud Console and configure them in the extension settings.
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+**Steps**
+1. Go to the Google Cloud Console and log in with your Google account.
+2. Create a new project or select an existing one.
+3. Navigate to APIs & Services > Library.
+4. Search for Google Chat API and enable it for your project.
+5. Go to APIs & Services > Credentials and create OAuth 2.0 credentials:
+  - Click Create Credentials and select OAuth 2.0 Client ID.
+  - Choose Desktop App as the application type.
+  - Once created, copy the ClientId and ClientSecret.
+6. Configure these credentials in VSCode:
+  - How to configure:
+    1. Open VSCode and go to File > Preferences > Settings > Extensions > Google Chat Extension.
+    2. Paste the ClientId and ClientSecret into the respective input fields.
 
-## Extension Settings
+**Notes**
+- Keep your credentials secure and do not share them with others.
+- If necessary, you can regenerate the ClientId or ClientSecret in the Google Cloud Console.
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+## Configuration
+1. Go to the extension settings.
+2. Provide the ClientId and ClientSecret obtained from the Google Cloud Console.
 
-For example:
+## How to Use
+1. Click the extension icon in the VSCode Activity Bar to open the chat sidebar.
+2. Authenticate your Google account by clicking the "Authenticate" button.
+3. After authentication:
+  - Select a space or DM from the dropdown.
+  - View chat history or send a message.
+4. Use the refresh icon to update the chat history or space list.
 
-This extension contributes the following settings:
+## Controls
+- **Refresh Button**: Updates the chat history of the selected space.
+- **Send Button**: Sends the message typed in the text area.
+- **Dropdown**: Select the chat space or DM.
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+## Troubleshooting
+- Ensure that the ClientId and ClientSecret are valid.
+- Verify that the Google Chat API is enabled for your Google Cloud project.
+- If authentication fails, reauthenticate by clicking the "Authenticate" button again.
 
-## Known Issues
+## Known Limitations
+- Media messages (e.g., images, videos) are not supported and will display as placeholder text.
+- Messages are retrieved in batches to optimize performance.
+- This extension interacts with Google Chat via the Google Chat API. It is important to note that the API is subject to rate limits, which may affect the frequency and amount of data you can retrieve or send.
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+## Contributing
+Feel free to submit issues, feature requests, or pull requests to improve the extension.
