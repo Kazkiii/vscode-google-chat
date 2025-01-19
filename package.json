@@ -9,15 +9,58 @@
   "categories": [
     "Other"
   ],
+  "keywords": [
+    "google",
+    "chat",
+    "google chat"
+  ],
+  "pricing": "Free",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kazkiii/vscode-google-chat"
+  },
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "google-chat.helloWorld",
-        "title": "Hello World"
+        "command": "extension.openGoogleChat",
+        "title": "Open Google Chat"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "googleChat",
+          "title": "Google Chat",
+          "icon": "assets/chat-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "googleChat": [
+        {
+          "type": "webview",
+          "id": "googleChatView",
+          "name": "Google Chat"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Google Chat",
+      "properties": {
+        "googleChat.clientId": {
+          "type": "string",
+          "default": "",
+          "description": "The Client ID for Google Chat API."
+        },
+        "googleChat.clientSecret": {
+          "type": "string",
+          "default": "",
+          "description": "The Client Secret for Google Chat API."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -28,14 +71,20 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.96.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/server-destroy": "^1.0.4",
+    "@types/vscode": "^1.96.0",
     "@typescript-eslint/eslint-plugin": "^8.17.0",
     "@typescript-eslint/parser": "^8.17.0",
-    "eslint": "^9.16.0",
-    "typescript": "^5.7.2",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1"
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.16.0",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@googleapis/chat": "^32.0.0",
+    "open": "^10.1.0",
+    "server-destroy": "^1.0.1"
   }
 }
