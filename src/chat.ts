@@ -10,8 +10,18 @@ export async function listSpaces() {
   }
 
   const chatClient = chat({ version: 'v1', auth: authClient });
-
   const response = await chatClient.spaces.list();
+
+  if (response.status === 429) {
+    vscode.window.showErrorMessage('Rate limit exceeded. Please try again later.');
+    return;
+  }
+
+  if (response.status !== 200) {
+    vscode.window.showErrorMessage('Failed to list spaces');
+    return;
+  }
+
   return (response.data.spaces ?? []).map(space => ({
       id: space.name,
       name: space.displayName || 'Direct Message',
@@ -28,6 +38,17 @@ export async function getChatHistory(spaceId: string, pageToken?: string) {
   
   const chatClient = chat({ version: 'v1', auth: authClient });
   const response = await chatClient.spaces.messages.list({ parent: spaceId, pageSize, pageToken });
+
+  if (response.status === 429) {
+    vscode.window.showErrorMessage('Rate limit exceeded. Please try again later.');
+    return;
+  }
+
+  if (response.status !== 200) {
+    vscode.window.showErrorMessage('Failed to get chat history');
+    return;
+  }
+
   const messages = (response.data.messages ?? []).map(message => ({
       text: message.text || 'This is non-compliant media information.',
   }));
@@ -46,10 +67,20 @@ export async function sendMessage(spaceId: string, text: string) {
   }
 
   const chatClient = chat({ version: 'v1', auth: authClient });
-  await chatClient.spaces.messages.create({
+  const response = await chatClient.spaces.messages.create({
     parent: spaceId,
     requestBody: {
         text,
     },
-});
+  });
+
+  if (response.status === 429) {
+    vscode.window.showErrorMessage('Rate limit exceeded. Please try again later.');
+    return;
+  }
+
+  if (response.status !== 200) {
+    vscode.window.showErrorMessage('Failed to send message');
+    return;
+  }
 }

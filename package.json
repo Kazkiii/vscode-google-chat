@@ -24,7 +24,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "extension.openGoogleChat",
+        "command": "googleChat.openView",
         "title": "Open Google Chat"
       }
     ],
@@ -41,7 +41,7 @@
       "googleChat": [
         {
           "type": "webview",
-          "id": "googleChatView",
+          "id": "googleChat.view",
           "name": "Google Chat"
         }
       ]
