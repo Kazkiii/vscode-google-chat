@@ -1,25 +1,47 @@
 let nextPageToken = null;
+let isAuthenticated = false;
 const vscode = acquireVsCodeApi();
-
+const authButton = document.getElementById('auth-button');
+const messageBox = document.getElementById('message-box');
+const sendButton = document.getElementById('send-button');
+const refreshButton = document.getElementById('refresh-button');
 const chatMessagesDiv = document.getElementById('chat-messages');
 const spacesDropdown = document.getElementById('spaces-dropdown');
 
+function updateUIBasedOnAuth() {
+  if (isAuthenticated) {
+      authButton.style.display = 'none';
+      chatMessagesDiv.textContent = ''; // Clear the placeholder message
+      messageBox.disabled = false;
+      sendButton.disabled = false;
+      refreshButton.disabled = false;
+  } else {
+      authButton.style.display = 'block';
+      chatMessagesDiv.textContent = 'Please authenticate to load chats.';
+      messageBox.disabled = true;
+      sendButton.disabled = true;
+      refreshButton.disabled = true;
+  }
+}
+
 chatMessagesDiv.addEventListener('scroll', () => {
+  if (!isAuthenticated) return;
   if (chatMessagesDiv.scrollTop === 0 && nextPageToken) {
     vscode.postMessage({ command: 'loadChatHistory', spaceId: spacesDropdown.value, nextPageToken });
   }
 });
 
-document.getElementById('auth-button').addEventListener('click', () => {
+authButton.addEventListener('click', () => {
   vscode.postMessage({ command: 'authenticate' });
 });
 
-document.getElementById('refresh-button').addEventListener('click', () => {
+refreshButton.addEventListener('click', () => {
+  if (!isAuthenticated) return;
   vscode.postMessage({ command: 'loadChatHistory', spaceId: spacesDropdown.value, nextPageToken });
 });
 
-document.getElementById('send-button').addEventListener('click', () => {
-  const messageBox = document.getElementById('message-box');
+sendButton.addEventListener('click', () => {
+  if (!isAuthenticated) return;
   vscode.postMessage({ command: 'sendMessage', spaceId: spacesDropdown.value, text: messageBox.value });
   messageBox.value = '';
 });
@@ -27,7 +49,7 @@ document.getElementById('send-button').addEventListener('click', () => {
 window.addEventListener('message', (event) => {
   const data = event.data;
   if (data.command === 'authenticated') {
-    document.getElementById('auth-button').style.display = 'none';
+    updateUIBasedOnAuth();
     vscode.postMessage({ command: 'loadSpaces' });
   } else if (data.command === 'spacesLoaded') {
     spacesDropdown.innerHTML = '';
@@ -42,11 +64,19 @@ window.addEventListener('message', (event) => {
     nextPageToken = data.nextPageToken;
     data.messages.forEach(message => {
       const div = document.createElement('div');
-      div.textContent = message.text || 'This is non-compliant media information.';
+      const messageText = message.text || 'This is non-compliant media information.';
+      div.textContent = `
+        <div>
+          <span>${chat.sender}</span> <span>${chat.timestamp}</span><br>
+          ${messageText}
+        </div>
+      `;
       chatMessagesDiv.appendChild(div);
     });
   } else if (data.command === 'messageSent') {
     nextPageToken = null;
     vscode.postMessage({ command: 'loadChatHistory', spaceId: spacesDropdown.value, nextPageToken });
   }
+
+  updateUIBasedOnAuth();
 });

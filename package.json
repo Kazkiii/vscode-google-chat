@@ -1,4 +1,5 @@
 {
+  "publisher": "Kazkiii",
   "name": "google-chat",
   "displayName": "Google Chat",
   "description": "VSCode extension lets you use Google Chat directly within your editor. With a dedicated sidebar, you can access chat spaces, direct messages, and interact with your team without switching apps.",

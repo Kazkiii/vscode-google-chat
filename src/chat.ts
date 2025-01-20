@@ -50,7 +50,9 @@ export async function getChatHistory(spaceId: string, pageToken?: string) {
   }
 
   const messages = (response.data.messages ?? []).map(message => ({
-      text: message.text || 'This is non-compliant media information.',
+    text: message.text || 'This is non-compliant media information.',
+    sender: message.sender?.displayName || 'Unknown',
+    timestamp: message.createTime ? new Date(message.createTime).toLocaleString() : 'Unknown',
   }));
 
   return {
